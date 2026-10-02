@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escape Room</title>
+<style>
+    body {
+        background-color: #000000;  /*color de fondo*/
+        display: flex; /*permite que el elemento se comporte como un contenedor flexible para moverlo a cualquier lado*/
+        justify-content: center; /*centra en horizontal*/
+        align-items: center;  /*centra en vertical*/
+        height: 100vh;  /*ocupa toda la ventana*/
+        margin: 0; 
+    font-family: monospace;  /*fuente de la ventana*/
+    }
+    p{
+        color:white;  /*color del texto*/
+        cursor: default; /*pone el cursor por defecto (la flechita)*/  
+        user-select: none; /*evita que se selecccione el texto*/
+    }
+    button{
+        background-color: #333;  /*color de fondo*/
+        color: white; /*color del texto*/
+        border: none; /*quita los bordes*/
+        padding: 10px 20px; /*aumenta el espacio alrededor del texto*/
+        justify-content: center; /*centra el contenido*/
+        align-items: center; /*centra el item*/
+        font-family: monospace; /*fuente del botón*/
+        cursor: pointer; /*cambia el cursor al pasar sobre el botón*/
+        user-select: none; /*lo mismo para este (explicacion de la propiedad arriba ↑)*/
+    }
+    #historial {
+            display: flex; /*lo mismo para este (explicacion de la propiedad arriba ↑)*/
+            flex-direction: column; /* Apila el texto y el botón en columna */
+            align-items: center;    /* Centra el texto y el botón entre sí */
+            text-align: center;     /* Asegura que el texto multilinea quede centrado */
+    }
+    </style>
+</head>
+<body>
+    <div id="terminal"> <!--se crea un contenido para la terminal-->
+        <div id="historial"> <!--se crea un contenido para el historial-->
+            <p>Bienvenido al ESCAPE ROOM. Escribe '/help' para ver los comandos disponibles.</p>
+            <button>COMENZAR</button>
+        </div>
+        <script>
+
+        </script>
+    </div>
+</body>
