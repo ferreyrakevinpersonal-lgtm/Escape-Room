@@ -4,15 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Escape Room</title>
-<style>
+<style> /*aca empieza el css*/
     body {
         background-color: #000000;  /*color de fondo*/
+        color: #ffffff;  /*color del texto*/
         display: flex; /*permite que el elemento se comporte como un contenedor flexible para moverlo a cualquier lado*/
         justify-content: center; /*centra en horizontal*/
         align-items: center;  /*centra en vertical*/
         height: 100vh;  /*ocupa toda la ventana*/
         margin: 0; 
-    font-family: monospace;  /*fuente de la ventana*/
+        font-family: monospace;  /*fuente de la ventana*/
+        transition: background-color 0.8s ease, color 0.8s ease; /* transición suave de 0.8 segundos para el fondo y el texto */
+    }
+    body.modo-blanco { /* modo blanco (se activa al hacer clic en COMENZAR) */
+        background-color: #ffffff;
+        color: #000000;
+    }
+    body.modo-blanco #terminal {
+        border-color: #000000; /* cambia el borde de la ventana a negro */
+    }
+    body.modo-blanco #historial p,
+    body.modo-blanco .linea-input span,
+    body.modo-blanco #comando {
+        color: #ffffff; /* el texto de la consola se vuelve negro */
     }
     p{
         color:white;  /*color del texto*/
@@ -30,22 +44,88 @@
         cursor: pointer; /*cambia el cursor al pasar sobre el botón*/
         user-select: none; /*lo mismo para este (explicacion de la propiedad arriba ↑)*/
     }
-    #historial {
-            display: flex; /*lo mismo para este (explicacion de la propiedad arriba ↑)*/
-            flex-direction: column; /* Apila el texto y el botón en columna */
-            align-items: center;    /* Centra el texto y el botón entre sí */
-            text-align: center;     /* Asegura que el texto multilinea quede centrado */
+    #inicio {
+        display: flex; /*lo mismo para este (explicacion de la propiedad arriba ↑)*/
+        flex-direction: column; /* Apila el texto y el botón en columna */
+        align-items: center;    /* Centra el texto y el botón entre sí */
+        text-align: center;     /* Asegura que el texto multilinea quede centrado */
     }
-    </style>
+    /* aqui empieza la siguiente pantalla */
+    .oculto { /* Esta clase nos ayuda para esconder elementos */
+        display: none !important; 
+    }
+    #terminal {
+        width: 80%; /* Ancho de la terminal */
+        max-width: 600px; /* Ancho máximo de la terminal */
+        height: 350px; /* Altura de la terminal */
+        background-color: #1e1e1e; /* Color de fondo de la terminal */
+        border: 1px solid #333;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; /* Hace que todo el contenido empiece desde arriba */
+        overflow-y: auto; /* Si hay mucho texto, la barra de scroll aparece en la terminal */
+    }
+    .linea-input {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 0;
+    }
+    .linea-input span {
+    color: #CCCCCC;
+    white-space: nowrap;
+    }
+    #cajadetexto {
+        background: transparent;
+        border: none;
+        outline: none;
+        color: #CCCCCC;
+        font-family: inherit;
+        font-size: inherit;
+        flex: 1;
+        margin: 0;
+        padding: 0;
+    }
+    #historial {
+        margin-bottom: 5px; /* Controla la distancia entre el texto y la caja de comandos */
+    }
+</style>
 </head>
-<body>
-    <div id="terminal"> <!--se crea un contenido para la terminal-->
-        <div id="historial"> <!--se crea un contenido para el historial-->
-            <p>Bienvenido al ESCAPE ROOM. Escribe '/help' para ver los comandos disponibles.</p>
-            <button>COMENZAR</button>
-        </div>
-        <script>
-
-        </script>
+<body> <!--aca empieza el html-->
+    <div id="inicio"> <!--se crea un contenido para el inicio-->
+        <p>Bienvenido al ESCAPE ROOM. Escribe '/help' para ver los comandos disponibles.</p>
+        <button id="button-comenzar">COMENZAR</button>
     </div>
+
+<!--pantalla de la terminal (aparece después de comenzar)-->
+
+    <div id="terminal" class="oculto">
+        <div id="historial">
+            <p>Microsoft Windows [Versión 6.1.7601] 
+            <br>
+            (c)Microsoft Corporation. Todos los derechos reservados.</p>
+        </div>
+        <div class="linea-input">
+            <span>usuario@escaperoom:~$</span> <!--no entendi muy bien que hace pero mas o menos es como algo que se queda quieto y dentro tiene nuestro texto del indicador de la terminal-->
+            <input type="text" id="cajadetexto" autocomplete="off"> <!--aca el usuario escribe sus comandos-->
+        </div>
+    </div>
+<script> // aca empieza javascript
+
+// guardamos los elementos en variables
+
+    const buttonComenzar = document.getElementById('button-comenzar');
+    const inicio = document.getElementById('inicio');
+    const terminal = document.getElementById('terminal');
+    const cajaTexto = document.getElementById('cajadetexto');
+    
+    cajaTexto.focus(); // ponemos el cursor listo para escribir en la caja de texto automáticamente
+    buttonComenzar.addEventListener('click', function() {  
+    inicio.classList.add('oculto'); // escondemos la pantalla de inicio
+    terminal.classList.remove('oculto'); // mostramos la terminal
+    document.body.classList.add('modo-blanco'); // aqui activamos la transición de colores al hacer clic en el botón COMENZAR
+    cajaTexto.focus(); // Ponemos el cursor en el input
+});
+</script>
 </body>
