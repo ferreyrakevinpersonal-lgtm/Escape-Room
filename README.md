@@ -7,7 +7,7 @@
 Este proyecto es un juego interactivo donde los jugadores deben resolver acertijos y usar comandos de terminal para lograr escapar.
 
 Puedes jugarlo directamente en tu navegador aquí:
-**[Haz clic aquí para jugar](https://ferreyrakevinpersonal-lgtm.github.io/Escape-Room/)**
+**[Haz clic aquí para jugar]()**
 
 ---
 
