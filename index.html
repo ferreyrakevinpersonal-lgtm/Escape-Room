@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es"> <!--idioma español-->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Escape Room</title>
+    <meta charset="UTF-8"> <!--codificación de caracteres-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--viewport para que se vea bien en dispositivos móviles-->
+    <title>Escape Room</title> <!--titulo-->
 <style> /*aca empieza el css*/
     body {
         background-color: #000000;  /*color de fondo*/
@@ -12,7 +12,7 @@
         justify-content: center; /*centra en horizontal*/
         align-items: center;  /*centra en vertical*/
         height: 100vh;  /*ocupa toda la ventana*/
-        margin: 0; 
+        margin: 0; /*quita el margen por defecto del body*/
         font-family: monospace;  /*fuente de la ventana*/
         transition: background-color 0.8s ease, color 0.8s ease; /* transición suave de 0.8 segundos para el fondo y el texto */
     }
@@ -37,7 +37,7 @@
         background-color: #333;  /*color de fondo*/
         color: white; /*color del texto*/
         border: none; /*quita los bordes*/
-        padding: 10px 20px; /*aumenta el espacio alrededor del texto*/
+        padding: 10px 20px; /* relleno o espacio interno dentro del elemento (entre el borde y el contenido). */
         justify-content: center; /*centra el contenido*/
         align-items: center; /*centra el item*/
         font-family: monospace; /*fuente del botón*/
@@ -59,37 +59,44 @@
         max-width: 600px; /* Ancho máximo de la terminal */
         height: 350px; /* Altura de la terminal */
         background-color: #1e1e1e; /* Color de fondo de la terminal */
-        border: 1px solid #333;
-        padding: 15px;
-        display: flex;
-        flex-direction: column;
+        border: 1px solid #333; /* Borde con color */
+        padding: 15px; /*lo mismo para este (explicacion de la propiedad arriba ↑)*/
+        display: flex; /*lo mismo para este (explicacion de la propiedad arriba ↑)*/
+        flex-direction: column; /*ocupa toda la ventana*/
         justify-content: flex-start; /* Hace que todo el contenido empiece desde arriba */
         overflow-y: auto; /* Si hay mucho texto, la barra de scroll aparece en la terminal */
     }
     .linea-input {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 0;
+        display: flex; /*lo mismo para este (explicacion de la propiedad arriba ↑)*/
+        align-items: center; /*lo mismo para este (explicacion de la propiedad arriba ↑)*/
+        gap: 8px; /* espacio entre el indicador de la terminal y la caja de comandos */
+        margin-top: 0; /*margen superior de la caja de comandos*/
     }
     .linea-input span {
-    color: #CCCCCC;
-    white-space: nowrap;
+    color: #CCCCCC; /* color del texto del indicador de la terminal */
+    white-space: nowrap; /* evita que el texto salte a una segunda línea, forzándolo a mantenerse en una sola fila. */
     }
     #cajadetexto {
-        background: transparent;
-        border: none;
-        outline: none;
-        color: #CCCCCC;
-        font-family: inherit;
-        font-size: inherit;
-        flex: 1;
-        margin: 0;
-        padding: 0;
+        background: transparent; /* fondo transparente */
+        border: none; /* sin borde */
+        outline: none; /* sin contorno al enfocar */
+        color: #CCCCCC; /* color del texto */
+        font-family: inherit; /* fuente heredada */
+        font-size: inherit; /* Tamaño de fuente heredado */
+        flex: 1; /* ocupa todo el espacio disponible */
+        margin: 0; /* sin margen */
+        padding: 0; /* sin relleno */
     }
     #historial {
-        margin-bottom: 5px; /* Controla la distancia entre el texto y la caja de comandos */
+        margin-bottom: 5px; /* controla la distancia entre el texto y la caja de comandos */
     }
+    /* para que las imágenes que aparezcan en el historial no se salgan del cuadro */
+    #historial img {
+        max-width: 100%;
+        height: auto;
+        margin-top: 10px;
+        border: 1px solid #000;
+}
 </style>
 </head>
 <body> <!--aca empieza el html-->
@@ -100,32 +107,91 @@
 
 <!--pantalla de la terminal (aparece después de comenzar)-->
 
-    <div id="terminal" class="oculto">
+    <div id="terminal" class="oculto"> <!-- contenido de la terminal -->
         <div id="historial">
             <p>Microsoft Windows [Versión 6.1.7601] 
             <br>
             (c)Microsoft Corporation. Todos los derechos reservados.</p>
         </div>
-        <div class="linea-input">
-            <span>usuario@escaperoom:~$</span> <!--no entendi muy bien que hace pero mas o menos es como algo que se queda quieto y dentro tiene nuestro texto del indicador de la terminal-->
-            <input type="text" id="cajadetexto" autocomplete="off"> <!--aca el usuario escribe sus comandos-->
+        <div class="linea-input"> <!-- contenedor para la línea de entrada -->
+            <span>usuario@escaperoom:~$</span> <!--no entendi muy bien que hace pero mas o menos es que puede escribir comandos el usuario-->
+            <input type="text" id="cajadetexto" autocomplete="off"> <!--aca el usuario escribe sus comandos (sin que en el futuro se muestre el historial de comandos que puso anteriormente)-->
         </div>
     </div>
 <script> // aca empieza javascript
 
-// guardamos los elementos en variables
+// guardamos los elementos en variables constantes que no van a cambiar
 
     const buttonComenzar = document.getElementById('button-comenzar');
     const inicio = document.getElementById('inicio');
     const terminal = document.getElementById('terminal');
     const cajaTexto = document.getElementById('cajadetexto');
+    const historial = document.getElementById('historial');
     
-    cajaTexto.focus(); // ponemos el cursor listo para escribir en la caja de texto automáticamente
-    buttonComenzar.addEventListener('click', function() {  
-    inicio.classList.add('oculto'); // escondemos la pantalla de inicio
-    terminal.classList.remove('oculto'); // mostramos la terminal
-    document.body.classList.add('modo-blanco'); // aqui activamos la transición de colores al hacer clic en el botón COMENZAR
-    cajaTexto.focus(); // Ponemos el cursor en el input
-});
+    // evento para iniciar la terminal
+    buttonComenzar.addEventListener('click', function() { // agregamos un evento al hacer clic en el botón COMENZAR
+        inicio.classList.add('oculto'); // escondemos la pantalla de inicio
+        terminal.classList.remove('oculto'); // mostramos la terminal
+        document.body.classList.add('modo-blanco'); // aqui activamos la transición de colores al hacer clic en el botón COMENZAR
+        cajaTexto.focus(); // ponemos el cursor listo para escribir en la caja de texto automáticamente
+    });
+
+    terminal.addEventListener('click', function() { //se mantiene el cursor en la caja de texto al tocar la terminal
+        cajaTexto.focus();
+    });
+
+    cajaTexto.addEventListener('keydown', function(evento) { //escuchar cuando el usuario presiona la tecla "Enter"
+        if (evento.key === 'Enter') {
+            const entrada = cajaTexto.value.trim(); // texto tal cual lo escribió
+            const comando = entrada.toLowerCase(); // texto en minúsculas para evaluar
+        
+            if (entrada !== '') { // imprimir el comando que escribió el usuario
+                historial.innerHTML += `<p>usuario@escaperoom:~$ ${entrada}</p>`;
+            
+                if (comando === '/help' || comando === '/help' || comando === 'ayuda') { // lógica de evaluación de comandos
+                    historial.innerHTML += `
+                        <p>Comandos disponibles:</p>
+                        <p> - <b>/help</b> : Muestra la lista de comandos disponibles.</p>
+                        <p> - <b>/dir</b>   : Muestra la lista de archivos y directorios del sistema.</p>
+                        <p> - <b>/cls</b>   : Limpia la pantalla de la terminal.</p>`;
+                }
+                else if (comando === '/dir') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\Sistema</p>
+                        <br>
+                        <p>02/10/2026  20:44    &lt;DIR&gt;          .</p>
+                        <p>02/10/2026  20:44    &lt;DIR&gt;          ..</p>
+                        <p>02/10/2026  20:30             1,024 notas.txt</p>
+                        <p>02/10/2026  19:15            45,210 pistas_clave.log</p>
+                        <p>02/10/2026  18:00         2,410,880 acceso_seguridad.exe</p>
+                        <p>               3 archivos    2,457,114 bytes</p>
+                    `;
+                }
+                else if (comando === '/cls' || comando === '/clear') { // limpia todo el historial y vuelve a poner el mensaje inicial
+                    historial.innerHTML = `
+                        <p>Microsoft Windows [Versión 6.1.7601] 
+                        <br>
+                        (c)Microsoft Corporation. Todos los derechos reservados.</p>
+                    `;
+                }
+                else if (comando === '/genio') { // comando secreto
+                    historial.innerHTML += `
+                        <img src="GENIO.jpg" alt="Genio" style="max-width: 200px; display: block; margin: 10px 0;">
+                    `;
+                    // el audio se ejecuta cuando el comando sea 'genio'
+                    const audioGenio = new Audio('geniocorte.mp3');
+                    audioGenio.play().catch(error => {
+                        console.log("El navegador bloqueó la reproducción automática del audio:", error);
+                    });
+                }
+                else { // mensaje para comandos no reconocidos
+                    historial.innerHTML += `<p>'${entrada}' no se reconoce como un comando interno o externo. Escribe <b>/help</b> para ver las opciones.</p>`;
+                }
+
+                cajaTexto.value = ''; // limpia la casilla de entrada
+                terminal.scrollTop = terminal.scrollHeight; // hacer scroll automático hacia abajo para siempre ver el último texto
+            }
+        }
+    });
 </script>
 </body>
