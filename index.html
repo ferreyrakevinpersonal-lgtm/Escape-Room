@@ -7,7 +7,7 @@
 <style> /*aca empieza el css*/
     body {
         background-color: #000000;  /*color de fondo*/
-        color: #ffffff;  /*color del texto*/
+        color: #CCCCCC;  /*color del texto*/
         display: flex; /*permite que el elemento se comporte como un contenedor flexible para moverlo a cualquier lado*/
         justify-content: center; /*centra en horizontal*/
         align-items: center;  /*centra en vertical*/
@@ -16,26 +16,15 @@
         font-family: monospace;  /*fuente de la ventana*/
         transition: background-color 0.8s ease, color 0.8s ease; /* transición suave de 0.8 segundos para el fondo y el texto */
     }
-    body.modo-blanco { /* modo blanco (se activa al hacer clic en COMENZAR) */
-        background-color: #ffffff;
-        color: #000000;
-    }
-    body.modo-blanco #terminal {
-        border-color: #000000; /* cambia el borde de la ventana a negro */
-    }
-    body.modo-blanco #historial p,
-    body.modo-blanco .linea-input span,
-    body.modo-blanco #comando {
-        color: #ffffff; /* el texto de la consola se vuelve negro */
-    }
     p{
-        color:white;  /*color del texto*/
+        color: #CCCCCC;  /*color del texto*/
         cursor: default; /*pone el cursor por defecto (la flechita)*/  
         user-select: none; /*evita que se selecccione el texto*/
     }
-    button{
+    button{ 
         background-color: #333;  /*color de fondo*/
-        color: white; /*color del texto*/
+        color: #CCCCCC; /*color del texto*/
+        font-size: 20px; /* tamaño de fuente del botón */
         border: none; /*quita los bordes*/
         padding: 10px 20px; /* relleno o espacio interno dentro del elemento (entre el borde y el contenido). */
         justify-content: center; /*centra el contenido*/
@@ -56,10 +45,9 @@
     }
     #terminal {
         width: 80%; /* Ancho de la terminal */
-        max-width: 600px; /* Ancho máximo de la terminal */
-        height: 350px; /* Altura de la terminal */
+        width: 100%; /* Ancho máximo de la terminal */
+        height: 100%; /* Altura de la terminal */
         background-color: #1e1e1e; /* Color de fondo de la terminal */
-        border: 1px solid #333; /* Borde con color */
         padding: 15px; /*lo mismo para este (explicacion de la propiedad arriba ↑)*/
         display: flex; /*lo mismo para este (explicacion de la propiedad arriba ↑)*/
         flex-direction: column; /*ocupa toda la ventana*/
@@ -71,6 +59,7 @@
         align-items: center; /*lo mismo para este (explicacion de la propiedad arriba ↑)*/
         gap: 8px; /* espacio entre el indicador de la terminal y la caja de comandos */
         margin-top: 0; /*margen superior de la caja de comandos*/
+        font-size: 20px; /* tamaño de fuente de la línea de entrada */
     }
     .linea-input span {
     color: #CCCCCC; /* color del texto del indicador de la terminal */
@@ -87,30 +76,32 @@
         margin: 0; /* sin margen */
         padding: 0; /* sin relleno */
     }
+    p {
+        font-size: 20px; /* tamaño de fuente */
+    }
     #historial {
         margin-bottom: 5px; /* controla la distancia entre el texto y la caja de comandos */
     }
     /* para que las imágenes que aparezcan en el historial no se salgan del cuadro */
     #historial img {
-        max-width: 100%;
-        height: auto;
-        margin-top: 10px;
-        border: 1px solid #000;
+        max-width: 100%; /* asegura que la imagen no exceda el ancho del contenedor */
+        height: auto; /* mantiene la proporción de la imagen */
+        margin-top: 10px; /* espacio superior para separar la imagen del texto anterior */
 }
 </style>
 </head>
 <body> <!--aca empieza el html-->
     <div id="inicio"> <!--se crea un contenido para el inicio-->
-        <p>Bienvenido al ESCAPE ROOM. Escribe '/help' para ver los comandos disponibles.</p>
+        <p>Bienvenido al ESCAPE ROOM apriete comenzar para iniciar el juego. Escribe 'help' para ver los comandos disponibles.</p>
         <button id="button-comenzar">COMENZAR</button>
     </div>
 
 <!--pantalla de la terminal (aparece después de comenzar)-->
 
     <div id="terminal" class="oculto"> <!-- contenido de la terminal -->
-        <div id="historial">
-            <p>Microsoft Windows [Versión 6.1.7601] 
-            <br>
+        <div id="historial"> <!--identificacion para proximamente usarla en scripts-->
+            <p>Microsoft Windows [Versión 6.1.7601]  <!-- parrafo-->
+            <br> <!--salto de linea-->
             (c)Microsoft Corporation. Todos los derechos reservados.</p>
         </div>
         <div class="linea-input"> <!-- contenedor para la línea de entrada -->
@@ -127,19 +118,17 @@
     const terminal = document.getElementById('terminal');
     const cajaTexto = document.getElementById('cajadetexto');
     const historial = document.getElementById('historial');
+    const aplicaciones = ['internet explorer', 'zuma', 'papelera de reciclaje', 'word', 'powerpoint'];
     
     // evento para iniciar la terminal
     buttonComenzar.addEventListener('click', function() { // agregamos un evento al hacer clic en el botón COMENZAR
         inicio.classList.add('oculto'); // escondemos la pantalla de inicio
         terminal.classList.remove('oculto'); // mostramos la terminal
-        document.body.classList.add('modo-blanco'); // aqui activamos la transición de colores al hacer clic en el botón COMENZAR
         cajaTexto.focus(); // ponemos el cursor listo para escribir en la caja de texto automáticamente
     });
-
     terminal.addEventListener('click', function() { //se mantiene el cursor en la caja de texto al tocar la terminal
-        cajaTexto.focus();
+        cajaTexto.focus(); // lo mismo que lo de arriba ↑
     });
-
     cajaTexto.addEventListener('keydown', function(evento) { //escuchar cuando el usuario presiona la tecla "Enter"
         if (evento.key === 'Enter') {
             const entrada = cajaTexto.value.trim(); // texto tal cual lo escribió
@@ -148,46 +137,212 @@
             if (entrada !== '') { // imprimir el comando que escribió el usuario
                 historial.innerHTML += `<p>usuario@escaperoom:~$ ${entrada}</p>`;
             
-                if (comando === '/help' || comando === '/help' || comando === 'ayuda') { // lógica de evaluación de comandos
+                if (comando === 'help' || comando === 'help' || comando === 'ayuda') { // lógica de evaluación de comandos
                     historial.innerHTML += `
-                        <p>Comandos disponibles:</p>
-                        <p> - <b>/help</b> : Muestra la lista de comandos disponibles.</p>
-                        <p> - <b>/dir</b>   : Muestra la lista de archivos y directorios del sistema.</p>
-                        <p> - <b>/cls</b>   : Limpia la pantalla de la terminal.</p>`;
+                        <p>Comandos disponibles:</p> <!-- parrafos -->
+                        <p> - <b>help</b> : Muestra la lista de comandos disponibles.</p>
+                        <p> - <b>dir</b>   : Muestra la lista de archivos y directorios del sistema.</p>
+                        <p> - <b>cls</b>   : Limpia la pantalla de la terminal.</p>`;
                 }
-                else if (comando === '/dir') {
+                else if (comando === 'dir') {
                     historial.innerHTML += `
-                        <p> Directorio de C:\\EscapeRoom\\Sistema</p>
-                        <br>
-                        <p>02/10/2026  20:44    &lt;DIR&gt;          .</p>
-                        <p>02/10/2026  20:44    &lt;DIR&gt;          ..</p>
-                        <p>02/10/2026  20:30             1,024 notas.txt</p>
-                        <p>02/10/2026  19:15            45,210 pistas_clave.log</p>
-                        <p>02/10/2026  18:00         2,410,880 acceso_seguridad.exe</p>
-                        <p>               3 archivos    2,457,114 bytes</p>
+                        <p> Directorio de C:\\EscapeRoom\\Sistema</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p>02/10/2026  20:44  escritorio</p>
+                        <p>02/10/2026  19:15  descargas</p>
+                        <p>02/10/2026  20:44  imagenes</p>
+                        <p>02/10/2026  19:15  documentos</p>
                     `;
                 }
-                else if (comando === '/cls' || comando === '/clear') { // limpia todo el historial y vuelve a poner el mensaje inicial
+                else if (comando === 'escritorio') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\escritorio</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p>02/10/2026  20:44  Internet Explorer</p>
+                        <p>02/10/2026  20:44  Tareas</p>
+                        <p>02/10/2026  20:30  Papelera de reciclaje</p>
+                        <p>02/10/2026  19:15  Word</p>
+                        <p>02/10/2026  18:00  PowerPoint</p>
+                    `;
+                }
+                else if (comando === 'tareas') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\tareas</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p>02/10/2026  20:44 pista 1</p>
+                        <p><img src="prueba 1.png" alt="prueba 1" style="max-width: 200px; display: block; margin: 10px 0;">
+                        <p style="border: 10px solid black; background-color: black; width: 100%; height: 60px;">codigo: .--. . .-. ..-
+                    `;
+                }
+                else if (comando === 'tareas') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\tareas</p> <!-- parrafos -->
+                    `;
+                }
+                else if (comando === 'peru') {
+                    historial.innerHTML += `
+                        <p>Es clave: "1820" regrese a dir</p>
+                    `;
+                }
+                else if (comando === 'imagenes') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\imagenes</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p>Carpeta bloqueada requiere codigo</p>
+                    `;
+                }
+                else if (comando === 'documentos') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\documentos</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p>Carpeta bloqueada requiere codigo</p>
+                    `;
+                }
+                else if (comando === '1535') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\imagenes</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p> Aqui tienes que formar una palabra de la inicial en cada imagen</p>
+                        <br> <!-- salto de linea -->
+                        <p> Cuando tengas la palabra completa, introducelo</p> <!-- la palabra es ceviche -->
+                        <img src="casa.jpg" alt="cerro" style="max-width: 200px; display: block; margin: 10px 0;">
+                        <img src="escudo.jpg" alt="escudo" style="max-width: 200px; display: block; margin: 10px 0;">
+                        <img src="vicuya.jpg" alt="vicuya" style="max-width: 200px; display: block; margin: 10px 0;">
+                        <img src="inca cola.jpg" alt="inca cola" style="max-width: 200px; display: block; margin: 10px 0;"> <!--  puse cola en vez de kola, choto mal-->
+                        <img src="capitan peru.jpeg" alt="capitan peru" style="max-width: 200px; display: block; margin: 10px 0;">
+                        <img src="hielo.jpg" alt="hielo" style="max-width: 200px; display: block; margin: 10px 0;">
+                        <img src="españa.jpg" alt="españa" style="max-width: 200px; display: block; margin: 10px 0;">
+                    `;
+                }
+                else if (comando === 'ceviche') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\imagenes</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p> esta es la proxima clave: 1836</p>
+                        <p> vuelve a dir y dirigete a descargas</p>
+                    `;
+                }
+                else if (comando === 'descargas') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\descargas</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p>Carpeta bloqueada requiere codigo</p>
+                    `;
+                }
+                else if (comando === '1836') { // QSOES es la clave
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\descargas</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p> A:S B:J C:Q D:V E:N F:T G:M H:K I:P J:W K:D L:H M:G N:Z Ñ:U O:B P:X Q:R R:Y S:E T:I U:O V:A W:F X:Ñ Y:C Z:L </p> 
+                    `;
+                }
+                else if (comando === 'causa') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\descargas</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p> Listo, completaste el juego felicidades</p>
+                    `;
+                }
+                else if (comando === '1820') {
+                historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\documentos</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p>02/09/2026  03:33  Economia</p>
+                        <p>02/10/2026  20:44  Propuestas</p>
+                        <p>02/10/2026  20:30  Leyes</p>
+                        <p>02/10/2026  19:15  Documento secreto </p>
+                        <p>02/10/2026  18:00  Activar bomba</p>
+                    `;
+                }
+                else if (comando === 'economia') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\Economia</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p> esta carpeta esta vacia</p>
+                    `;
+                }
+                else if (comando === 'propuestas') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\Propuestas</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p> ninguna</p>
+                    `;
+                }
+                else if (comando === 'leyes') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\Leyes</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p> permitir golpes de estado</p>
+                    `;
+                }
+                else if (comando === 'documento secreto') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\Documento Secreto</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p> codigo: Inaax</p> <!-- son 10 rotaciones -->
+                        <p> (debes utilizar un cifrado de desencriptacion)</p>
+                    `;
+                }
+                else if (comando === 'cerro') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\cerro</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p> Bien echo, esta es la proxima clave: 1535</p>
+                        <p> vuelve a dir y dirigete a imagenes</p>
+                    `;
+                }
+                else if (comando === 'activar bomba') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\Activar Bomba</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p> Al activar la bomba, se iniciará el proceso de autodestruccion de Lima</p>
+                        <p> ¿Desea continuar? (si/no)</p>
+                    `;
+                }
+                else if (comando === 'si') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\Activar Bomba</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <img src="bomba atomica.jpg" alt="Bomba" style="max-width: 200px; display: block; margin: 10px 0;">
+                        <p> Lima fue destruida</p>
+                        <br> <!-- salto de linea -->
+                        <p> Perdiste, te metieron en cana</p> <!-- xd, solo lo metian en cana por eso-->
+                    `;
+                }
+                else if (comando === 'no') {
+                    historial.innerHTML += `
+                        <p> Directorio de C:\\EscapeRoom\\Activar Bomba</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p> Activación de la bomba cancelada</p>
+                    `;
+                }
+                else if (comando === 'cls' || comando === 'clear') { // limpia todo el historial y vuelve a poner el mensaje inicial
                     historial.innerHTML = `
-                        <p>Microsoft Windows [Versión 6.1.7601] 
-                        <br>
+                        <p>Microsoft Windows [Versión 6.1.7601] <!-- parrafos -->
+                        <br> <!-- salto de linea -->
                         (c)Microsoft Corporation. Todos los derechos reservados.</p>
                     `;
                 }
-                else if (comando === '/genio') { // comando secreto
+                else if (comando === 'genio') { // comando secreto
                     historial.innerHTML += `
                         <img src="GENIO.jpg" alt="Genio" style="max-width: 200px; display: block; margin: 10px 0;">
                     `;
                     // el audio se ejecuta cuando el comando sea 'genio'
-                    const audioGenio = new Audio('geniocorte.mp3');
+                    const audioGenio = new Audio('geniocorte.mp3'); //imagen y audio del genio
                     audioGenio.play().catch(error => {
                         console.log("El navegador bloqueó la reproducción automática del audio:", error);
                     });
                 }
+                else if (aplicaciones.includes(comando.toLowerCase().trim())) {
+                    historial.innerHTML += `
+                        <p>Directorio de C:\\EscapeRoom\\escritorio</p> <!-- parrafos -->
+                        <br> <!-- salto de linea -->
+                        <p>No se puede ejecutar en la terminal</p>
+                    `;
+                }                
                 else { // mensaje para comandos no reconocidos
-                    historial.innerHTML += `<p>'${entrada}' no se reconoce como un comando interno o externo. Escribe <b>/help</b> para ver las opciones.</p>`;
+                    historial.innerHTML += `<p>'${entrada}' no se reconoce como un comando interno o externo. Escribe <b>help</b> para ver las opciones.</p>`;
                 }
-
                 cajaTexto.value = ''; // limpia la casilla de entrada
                 terminal.scrollTop = terminal.scrollHeight; // hacer scroll automático hacia abajo para siempre ver el último texto
             }
